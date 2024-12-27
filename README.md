@@ -1,10 +1,9 @@
 
-
-# Blood Donation System
+# Blood Bank Management System
 
 ## Description
 
-The Blood Donation System is a Node.js application that utilizes MySQL to manage donor and patient information. It provides a simple interface to add donors and patients, check blood availability, generate bills, and maintain a database of blood donors.
+The Blood Bank Management System is a Node.js application that utilizes MySQL to manage donor and patient information. It provides a simple interface to add donors and patients, check blood availability, generate bills, and maintain a database of blood donors.
 
 ## Table of Contents
 
@@ -25,8 +24,8 @@ Before running the application, ensure that you have Node.js and MySQL installed
 3. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/your-username/blood-donation-system.git
-   cd blood-donation-system
+   git clone https://github.com/Manoj-Kumar-BV/Blood-Bank-Management-System.git
+   cd Blood-Bank-Management-System
    ```
 
 4. **Install dependencies**:
@@ -56,8 +55,8 @@ Before running the application, ensure that you have Node.js and MySQL installed
    - Create a MySQL database named `mysql` (you can choose a different name if you prefer).
    
      ```sql
-     CREATE DATABASE IF NOT EXISTS mysql;
-     USE mysql;
+     CREATE DATABASE IF NOT EXISTS blood_bank_management_system;
+     USE blood_bank_management_system;
      ```
 
    - Update the configuration in `config.js` with your database details.
@@ -88,7 +87,7 @@ To use the Blood Donation System:
 
 5. Generate bills:
 
-   - After selecting a donor, a bill will be generated, and the donor and blood details will be removed from the database.
+   - After selecting a donor, a bill will be generated, and the donor and blood details will be removed from the database. And this bill can be Downloaded.
 
 ## Features
 
@@ -100,7 +99,3 @@ To use the Blood Donation System:
 ## Contributing
 
 If you'd like to contribute to this project, please follow the guidelines outlined in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
