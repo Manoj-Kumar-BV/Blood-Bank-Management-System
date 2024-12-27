@@ -1,0 +1,94 @@
+<!-- selectDonor.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Head content -->
+  <link href="./CSS/selDon.css" rel="stylesheet">
+</head>
+
+<body>
+
+  <h2>Select Donor</h2>
+
+  <!-- Display the list of available donors -->
+  <div class="donor-container">
+  <div id="donorList" style="display:  flex; justify-content: center; flex-direction: column; align-items: center;">
+    <!-- Donor details will be dynamically added here -->
+  </div>
+</div>
+
+  <!-- Form to allow the patient to select a donor -->
+  <form id="selectDonorForm" action="/selectDonor" method="post">
+    <label for="donorId">Select Donor:</label>
+    <select id="donorId" name="donor_id" required>
+      <!-- Options will be dynamically added here -->
+    </select>
+
+    <button type="submit">Select Donor</button>
+  </form>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      // Extract donor details from query parameters
+      const queryParams = new URLSearchParams(window.location.search);
+      const donorDetailsString = queryParams.get('donorDetails');
+      const donorDetails = JSON.parse(decodeURIComponent(donorDetailsString));
+  
+      // Display the list of available donors
+      const donorList = document.getElementById('donorList');
+      
+      const donorListItems = await Promise.all(donorDetails.map(async (donor) => {
+        const report = await find_data(donor.donor_id);
+        return `<div class="donor-card">
+                  <div class="donor-info">
+                    <div class="donor-detail">
+                      <span class="label">Name:</span>
+                      <span class="value">${donor.donor_name}</span>
+                    </div>
+                    <div class="donor-detail">
+                      <span class="label">Phone Number:</span>
+                      <span class="value">${donor.phone_no}</span>
+                    </div>
+                  </div>
+                  <div class="donor-report">
+                    <span class="label">Donor Report:</span>
+                    <span class="value">${report || 'Not found'}</span>
+                  </div>
+                </div>`;
+      }));
+  
+      donorList.innerHTML = donorListItems.join('');
+  
+      // Populate the select options with available donors
+      const donorSelect = document.getElementById('donorId');
+      donorSelect.innerHTML = donorDetails.map(donor => `<option value="${donor.donor_id}">${donor.donor_name}</option>`).join('');
+    });
+  
+    async function find_data(donor_id) {
+      try {
+        const response = await fetch(`/api/donor/${donor_id}`);
+        const data = await response.json();
+  
+        if (!data) {
+          // No data found, return a specific value or throw an error
+          console.log('No data found for donor_id:', donor_id);
+          return null; // You can replace null with any other value you prefer
+        }
+  
+        console.log(data);
+  
+        // Return the 'report' value from the data
+        return data.report;
+      } catch (error) {
+        console.error('Error:', error);
+        throw error; // You may want to handle the error in the calling code
+      }
+    }
+  </script>
+  
+  
+  
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 p-4">
+    <div class="max-w-md mx-auto bg-white rounded p-6 shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Blood Donation</h2>
+        <div class="mb-4">
+            <label class="inline-flex items-center">
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" id="agreeCheckbox1">
+                <span class="ml-2">I am not a Diabetic patient</span>
+            </label>
+        </div>
+        <div class="mb-4">
+            <label class="inline-flex items-center">
+                <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" id="agreeCheckbox2">
+                <span class="ml-2">I am not infected by HIV</span>
+            </label>
+        </div>
+        
+        <button onclick="checkAgreement()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Continue</button>
+    </div>
+
+    <script>
+        async function checkAgreement() {
+            var agreementCheckbox1 = document.getElementById('agreeCheckbox1');
+            var agreementCheckbox2 = document.getElementById('agreeCheckbox2');
+            
+            var agreementStatus1 = agreementCheckbox1.checked;
+            var agreementStatus2 = agreementCheckbox2.checked;
+
+            try {
+                const response = await fetch('/check', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ agreementStatus1, agreementStatus2 })
+                });
+
+                // Redirect to /index.html if response is true
+                if (response.ok) {
+                    window.location.href = "/index";
+                } else {
+                    // Handle error response if any
+                    const errorMessage = await response.text();
+                    console.error('Error:', errorMessage);
+                    alert(errorMessage); // Show error message
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+
+</html>

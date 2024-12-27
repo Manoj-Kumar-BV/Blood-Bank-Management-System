@@ -1,0 +1,71 @@
+
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f2f2f2;/* Light gray background */
+  }
+  
+  h2 {
+    color: #1a73e8;
+    font-size: 35px;
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: green; /* Green color for labels */
+}
+  form {
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff; /* White background for forms */
+    padding: 20px;
+    border-radius: 8px;
+    font-size:20px;
+    font-family:  Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    text-emphasis-color: green;
+    box-shadow: 0 0 10px rgba(73, 144, 153, 0.1); /* Add a subtle shadow */
+    width: 600px; /* Adjusted width for the form */
+    margin-right: auto; /* Align the form to the left */
+    /*margin-left: auto; */   
+  }
+  
+  input {
+    margin-bottom: 10px;
+    padding: 8px;
+    width: calc(100% - 16px); /* Adjusted width to account for padding */
+    box-sizing: border-box; /* Ensure padding is included in the width */
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #4caf50; /* Green button background */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .blood-delivey{
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff; /* White background for forms */
+    padding: 20px;
+    border-radius: 8px;
+    font-size:20px;
+    font-family:  Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    text-emphasis-color: green;
+    box-shadow: 0 0 10px rgba(73, 144, 153, 0.1); /* Add a subtle shadow */
+    width: 600px; /* Adjusted width for the form */
+    margin-right: auto; /* Align the form to the left */
+  }

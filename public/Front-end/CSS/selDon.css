@@ -1,0 +1,124 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 20px;
+    background-color: #f2f2f2; /* Light gray background */
+    color: #333;
+}
+
+h2 {
+    color: #1a73e8; /* Blue color for heading */
+    text-align:center;
+    font-size: 35px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+form {
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #fff; /* White background for forms */
+    padding: 20px;
+    border-radius: 8px;
+    font-size:20px;
+    font-family:  Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    text-emphasis-color: green;
+    box-shadow: 0 0 10px rgba(73, 144, 153, 0.1); /* Add a subtle shadow */
+    width: 600px; /* Adjusted width for the form */
+    margin-right: auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4CAF50; /* Green color for labels */
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 4px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:focus {
+    border-color: #4CAF50; /* Change border color on focus */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Add a subtle shadow on focus */
+}
+
+button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
+}.donor-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .donor-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(73, 144, 153, 0.1);
+    margin: 10px;
+    padding: 15px;
+    width: calc(50% - 20px); /* Adjust the percentage width based on your preference */
+    box-sizing: border-box;
+  }
+  
+  @media (max-width: 800px) {
+    .donor-card {
+      width: calc(100% - 20px);
+    }
+  }
+
+  /* ... (your existing styles) */
+  
+  .donor-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .donor-detail {
+    flex: 1;
+  }
+  
+  .label {
+    font-weight: bold;
+    color: #4CAF50;
+  }
+  
+  .value {
+    color: #333;
+  }
+  
+  .donor-report {
+    margin-top: 10px;
+  }
+  
+  
+  
+  /* Add more styles as needed */
+  
