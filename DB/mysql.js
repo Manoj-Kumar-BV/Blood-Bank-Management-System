@@ -58,18 +58,18 @@ CREATE TABLE IF NOT EXISTS donor (
 `;
 
 
-// Create 'patient' table if not exists
-const createPatientTableQuery = `
-CREATE TABLE IF NOT EXISTS patient (
-  patient_id INT NOT NULL AUTO_INCREMENT,
-  patient_name VARCHAR(20),
-  p_phno VARCHAR(255),
-  p_email VARCHAR(100),
+// Create 'receiver' table if not exists
+const createReceiverTableQuery = `
+CREATE TABLE IF NOT EXISTS receiver (
+  receiver_id INT NOT NULL AUTO_INCREMENT,
+  receiver_name VARCHAR(20),
+  r_phno VARCHAR(255),
+  r_email VARCHAR(100),
   hospital_address VARCHAR(50),
-  patient_address VARCHAR(50),
+  r_address VARCHAR(50),
   blood_type VARCHAR(20),
   urgency_level ENUM('High', 'Medium', 'Low') DEFAULT 'Medium',
-  PRIMARY KEY (patient_id)
+  PRIMARY KEY (receiver_id)
 )
 `;
 
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS blood_delivery (
   delivery_id INT AUTO_INCREMENT PRIMARY KEY,
   delivery_date DATE,
   donor_id INT,
-  patient_id INT,
+  receiver_id INT,
   blood_type VARCHAR(20),
   blood_bank_id INT
 )
@@ -115,7 +115,7 @@ executeQuery(createDoctorTableQuery, null, 0);
 executeQuery(createDonorTableQuery, null, 0);
 executeQuery(createBloodBankTableQuery, null, 0);
 executeQuery(createBloodTableQuery, null, 0);
-executeQuery(createPatientTableQuery, null, 0);
+executeQuery(createReceiverTableQuery, null, 0);
 executeQuery(createBloodDeliveryTableQuery, null, 0);
 
 

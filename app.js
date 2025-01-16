@@ -191,7 +191,7 @@ app.get("/patient", (req, res) => {
 })
 
 app.post("/patient", (req, res) => {
-    const { patient_name, p_phno, p_email, hospital_address, patient_address, blood_type, blood_bank_id, urgency_level } = req.body;
+    const { receiver_name, r_phno, r_email, hospital_address, r_address, blood_type, blood_bank_id, urgency_level } = req.body;
 
     // Get the date 45 days ago from the current date
     const fortyFiveDaysAgo = new Date();
@@ -227,21 +227,21 @@ app.post("/patient", (req, res) => {
                 blood_bank_name: donor.blood_bank_name,
             }));
 
-            // Save patient details only when the donor is available
+            // Save receiver details only when the donor is available
             const savePatientQuery = `
-                INSERT INTO patient (patient_name, p_phno, p_email, hospital_address, patient_address, blood_type, urgency_level)
+                INSERT INTO receiver (receiver_name, r_phno, r_email, hospital_address, r_address, blood_type, urgency_level)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
             `;
 
-            pool.query(savePatientQuery, [patient_name, p_phno, p_email, hospital_address, patient_address, blood_type, urgency_level], (savePatientError, savePatientResults) => {
+            pool.query(savePatientQuery, [receiver_name, r_phno, r_email, hospital_address, r_address, blood_type, urgency_level], (savePatientError, savePatientResults) => {
                 if (savePatientError) {
-                    console.error('Error saving patient details:', savePatientError);
+                    console.error('Error saving receiver details:', savePatientError);
                     res.status(500).json({ error: 'Internal Server Error' });
                     return;
                 }
 
                 // Redirect to the /selectDonor route with patient and donor details as query parameters
-                res.redirect(`/selectDonor?patient_name=${encodeURIComponent(patient_name)}&p_phno=${encodeURIComponent(p_phno)}&p_email=${encodeURIComponent(p_email)}&hospital_address=${encodeURIComponent(hospital_address)}&patient_address=${encodeURIComponent(patient_address)}&blood_type=${encodeURIComponent(blood_type)}&urgency_level=${encodeURIComponent(urgency_level)}&donorDetails=${encodeURIComponent(JSON.stringify(donorDetails))}`);
+                res.redirect(`/selectDonor?receiver_name=${encodeURIComponent(receiver_name)}&r_phno=${encodeURIComponent(r_phno)}&r_email=${encodeURIComponent(r_email)}&hospital_address=${encodeURIComponent(hospital_address)}&r_address=${encodeURIComponent(r_address)}&blood_type=${encodeURIComponent(blood_type)}&urgency_level=${encodeURIComponent(urgency_level)}&donorDetails=${encodeURIComponent(JSON.stringify(donorDetails))}`);
             });
         } else {
             // Blood is not available in the specified blood bank for the required type within the last 45 days
@@ -257,15 +257,10 @@ app.get("/selectDonor", (req, res) => {
 })
 app.post("/selectDonor", (req, res) => {
     const { donor_id } = req.body;
-    // console.log(donor_id);
-
 
     // Fetch patient details from req.query
-    const { patient_name, p_phno, hospital_address, patient_address, blood_type, donorDetails } = temporaryStorage.pop();
+    const { receiver_name, r_phno, hospital_address, r_address, blood_type, donorDetails } = temporaryStorage.pop();
     const parsedDonorDetails = JSON.parse(decodeURIComponent(donorDetails));
-
-    // Get details of the selected donor
-    // console.log("Parsed Donor Details:", parsedDonorDetails);
 
     // Get details of the selected donor
     let selectedDonor;
@@ -275,7 +270,7 @@ app.post("/selectDonor", (req, res) => {
             break;
         }
     }
-    console.log(selectedDonor);
+
     // Delete the row from the blood table where donor_id matches
     const deleteBloodQuery = `
       DELETE FROM blood
@@ -302,10 +297,82 @@ app.post("/selectDonor", (req, res) => {
                 return;
             }
 
-            // Redirect to the /generateBill route with patient and donor details as query parameters
-            // In the /selectDonor route, where you redirect to /generateBill
-            res.redirect(`/generateBill?patient_name=${encodeURIComponent(patient_name)}&p_phno=${encodeURIComponent(p_phno)}&hospital_address=${encodeURIComponent(hospital_address)}&patient_address=${encodeURIComponent(patient_address)}&donor_name=${encodeURIComponent(selectedDonor.donor_name)}&phone_no=${encodeURIComponent(selectedDonor.phone_no)}&don_address=${encodeURIComponent(selectedDonor.donor_address)}&blood_type=${encodeURIComponent(blood_type)}&blood_bank_name=${encodeURIComponent(selectedDonor.blood_bank_name)}`);
+            // Insert receiver details if not already present
+            const insertReceiverQuery = `
+                INSERT INTO receiver (receiver_name, r_phno, hospital_address, r_address, blood_type)
+                VALUES (?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE receiver_name = receiver_name
+            `;
 
+            pool.query(insertReceiverQuery, [receiver_name, r_phno, hospital_address, r_address, blood_type], (insertReceiverError) => {
+                if (insertReceiverError) {
+                    console.error('Error inserting receiver details:', insertReceiverError);
+                    res.status(500).json({ error: 'Internal Server Error' });
+                    return;
+                }
+
+                // Fetch the receiver_id
+                const patientIdQuery = `
+                    SELECT receiver_id FROM receiver WHERE receiver_name = ? AND r_phno = ?
+                `;
+
+                pool.query(patientIdQuery, [receiver_name, r_phno], (error, results) => {
+                    if (error) {
+                        console.error('Error fetching receiver_id:', error);
+                        res.status(500).json({ error: 'Internal Server Error' });
+                        return;
+                    }
+
+                    // Extract receiver_id from the results if available
+                    const receiver_id = results.length > 0 ? results[0].receiver_id : null;
+
+                    if (!receiver_id) {
+                        console.error('Receiver not found or missing receiver_id');
+                        res.status(404).json({ error: 'Receiver not found or missing receiver_id' });
+                        return;
+                    }
+
+                    // Insert data into the blood_delivery table
+                    const insertBloodDeliveryQuery = `
+                        INSERT INTO blood_delivery (delivery_date, donor_id, receiver_id, blood_type, blood_bank_id)
+                        VALUES (?, ?, ?, ?, ?)
+                    `;
+
+                    // Fetch the blood_bank_id based on the blood_bank_name
+                    const bloodBankIdQuery = `
+                        SELECT blood_bank_id FROM blood_bank WHERE blood_bank_name = ?
+                    `;
+
+                    pool.query(bloodBankIdQuery, [selectedDonor.blood_bank_name], (error, bloodBankResults) => {
+                        if (error) {
+                            console.error('Error fetching blood_bank_id:', error);
+                            res.status(500).json({ error: 'Internal Server Error' });
+                            return;
+                        }
+
+                        const blood_bank_id = bloodBankResults.length > 0 ? bloodBankResults[0].blood_bank_id : null;
+
+                        if (!blood_bank_id) {
+                            console.error('Blood bank not found or missing blood_bank_id');
+                            res.status(404).json({ error: 'Blood bank not found or missing blood_bank_id' });
+                            return;
+                        }
+
+                        // Execute the blood delivery insertion query with blood_type and blood_bank_id
+                        pool.query(insertBloodDeliveryQuery, [new Date(), donor_id, receiver_id, blood_type, blood_bank_id], (error, results) => {
+                            if (error) {
+                                console.error('Error inserting data into blood_delivery table:', error);
+                                res.status(500).json({ error: 'Internal Server Error' });
+                                return;
+                            } else {
+                                console.log('Data inserted into blood_delivery table successfully.');
+                                // Redirect to the /generateBill route with patient and donor details as query parameters
+                                res.redirect(`/generateBill?receiver_name=${encodeURIComponent(receiver_name)}&r_phno=${encodeURIComponent(r_phno)}&hospital_address=${encodeURIComponent(hospital_address)}&r_address=${encodeURIComponent(r_address)}&donor_name=${encodeURIComponent(selectedDonor.donor_name)}&phone_no=${encodeURIComponent(selectedDonor.phone_no)}&don_address=${encodeURIComponent(selectedDonor.donor_address)}&blood_type=${encodeURIComponent(blood_type)}&blood_bank_name=${encodeURIComponent(selectedDonor.blood_bank_name)}`);
+                            }
+                        });
+                    });
+                });
+            });
         });
     });
 });
@@ -407,7 +474,7 @@ app.get('/getBloodBank', (req, res) => {
 
 
 app.get('/generateBill', (req, res) => {
-    const { patient_name, p_phno, p_email, hospital_address, patient_address, donor_name, phone_no, don_address, blood_type, blood_bank_name } = req.query;
+    const { receiver_name, r_phno, r_email, hospital_address, r_address, donor_name, phone_no, don_address, blood_type, blood_bank_name } = req.query;
 
     const generateBillTemplatePath = path.join(__dirname, 'public', 'Front-end', 'generateBill.html');
     fs.readFile(generateBillTemplatePath, 'utf-8', (err, data) => {
@@ -418,11 +485,11 @@ app.get('/generateBill', (req, res) => {
         }
 
         const generateBillHtml = data
-            .replace('{{patient_name}}', patient_name)
-            .replace('{{p_phno}}', p_phno)
-            .replace('{{p_email}}', p_email)
+            .replace('{{receiver_name}}', receiver_name)
+            .replace('{{r_phno}}', r_phno)
+            .replace('{{r_email}}', r_email)
             .replace('{{hospital_address}}', hospital_address)
-            .replace('{{patient_address}}', patient_address)
+            .replace('{{r_address}}', r_address)
             .replace('{{donor_name}}', donor_name)
             .replace('{{phone_no}}', phone_no)
             .replace('{{don_address}}', don_address)
@@ -435,10 +502,10 @@ app.get('/generateBill', (req, res) => {
 
 app.get('/generateBill', async (req, res) => {
     const {
-        patient_name,
-        p_phno,
+        receiver_name,
+        r_phno,
         hospital_address,
-        patient_address,
+        r_address,
         donor_id,
         blood_type,
         DonorDetails
@@ -462,28 +529,28 @@ app.get('/generateBill', async (req, res) => {
 
     // Fetch patient_id from the database or generate it dynamically
     const patientIdQuery = `
-        SELECT patient_id FROM patient WHERE patient_name = ? AND p_phno = ?
+        SELECT receiver_id FROM receiver WHERE receiver_name = ? AND r_phno = ?
     `;
 
-    pool.query(patientIdQuery, [patient_name, p_phno], (error, results) => {
+    pool.query(patientIdQuery, [receiver_name, r_phno], (error, results) => {
         if (error) {
-            console.error('Error fetching patient_id:', error);
+            console.error('Error fetching receiver_id:', error);
             res.status(500).json({ error: 'Internal Server Error' });
             return;
         }
 
-        // Extract patient_id from the results if available
-        const patient_id = results.length > 0 ? results[0].patient_id : null;
+        // Extract receiver_id from the results if available
+        const receiver_id = results.length > 0 ? results[0].receiver_id : null;
 
-        if (!patient_id) {
-            console.error('Patient not found or missing patient_id');
-            res.status(404).json({ error: 'Patient not found or missing patient_id' });
+        if (!receiver_id) {
+            console.error('Receiver not found or missing receiver_id');
+            res.status(404).json({ error: 'receiver not found or missing receiver_id' });
             return;
         }
 
         // Insert data into the blood_delivery table
         const insertBloodDeliveryQuery = `
-            INSERT INTO blood_delivery (delivery_date, donor_id, patient_id, blood_type, blood_bank_id)
+            INSERT INTO blood_delivery (delivery_date, donor_id, receiver_id, blood_type, blood_bank_id)
             VALUES (?, ?, ?, ?, ?)
         `;
 
@@ -508,7 +575,7 @@ app.get('/generateBill', async (req, res) => {
             }
 
             // Execute the blood delivery insertion query with blood_type and blood_bank_id
-            pool.query(insertBloodDeliveryQuery, [currentDate, donor_id, patient_id, blood_type, blood_bank_id], (error, results) => {
+            pool.query(insertBloodDeliveryQuery, [currentDate, donor_id, receiver_id, blood_type, blood_bank_id], (error, results) => {
                 if (error) {
                     console.error('Error inserting data into blood_delivery table:', error);
                     res.status(500).json({ error: 'Internal Server Error' });
@@ -522,10 +589,10 @@ app.get('/generateBill', async (req, res) => {
                     const generateBillTemplate = fs.readFileSync(generateBillTemplatePath, 'utf-8');
 
                     const generateBillHtml = generateBillTemplate
-                        .replace('{{patient_name}}', patient_name)
-                        .replace('{{p_phno}}', p_phno)
+                        .replace('{{receiver_name}}', receiver_name)
+                        .replace('{{r_phno}}', r_phno)
                         .replace('{{hospital_address}}', hospital_address)
-                        .replace('{{patient_address}}', patient_address)
+                        .replace('{{r_address}}', r_address)
                         .replace('{{donor_id}}', donor_id)
                         .replace('{{donor_name}}', donor_name)
                         .replace('{{phone_no}}', phone_no)
