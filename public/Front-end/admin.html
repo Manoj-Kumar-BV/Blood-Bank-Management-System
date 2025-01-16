@@ -10,78 +10,73 @@
 </head>
 
 <body>
-   <!-- Blood Delivery Count by Year -->
-   <h2>Blood Delivery Count by Year</h2>
-   <div class="blood-delivey">
- 
-     <label for="year">Select Year:</label>
-     <select name="year" id="year">
-       <!-- Options will be populated using JavaScript -->
-     </select>
-     <button onclick="getBloodDeliveriesByYear()">Get Count</button>
-     <p id="yearDeliveryCount">Delivery Count: </p>
-   </div>
- 
-   <!-- Blood Delivery Count by Month and Year -->
-   <h2>Blood Delivery Count by Month</h2>
-   <div class="blood-delivey">
-     <label for="year">Select Year:</label>
-     <select name="year" id="yearMonth">
-       <!-- Options will be populated using JavaScript -->
-     </select>
-     <label for="month">Select Month:</label>
-     <select name="month" id="month">
-       <!-- Options will be populated using JavaScript -->
-     </select>
-     <button onclick="getBloodDeliveriesByMonth()">Get Count</button>
-     <p id="monthDeliveryCount">Delivery Count: </p>
-   </div>
- 
-   <h2>Blood Delivery Count by Blood Bank</h2>
-   <div class="blood-delivey">
-     <label for="bloodBank">Select Blood Bank:</label>
-     <select name="bloodBank" id="bloodBank">
-       <!-- Blood bank options will be populated dynamically -->
-     </select>
-     <button onclick="fetchBloodDeliveryCount()">Get Count</button>
-     <p id="bloodBankDeliveryCount">Delivery Count: </p>
-   </div>
-   <h2>Blood Delivery Count by Blood Type</h2>
- <div class="blood-delivey">
-   <label for="bloodType">Select Blood Type:</label>
-   <select name="bloodType" id="bloodType">
-     <option value="A+">A+</option>
-     <option value="A-">A-</option>
-     <option value="B+">B+</option>
-     <option value="B-">B-</option>
-     <option value="AB+">AB+</option>
-     <option value="AB-">AB-</option>
-     <option value="O+">O+</option>
-     <option value="O-">O-</option>
-   </select>
-   <button onclick="fetchBloodDeliveryCountByType()">Get Count</button>
-   <p id="bloodTypeDeliveryCount">Delivery Count: </p>
+  <!-- Blood Delivery Count by Year -->
+  <h2>Blood Delivery Count by Year</h2>
+  <div class="blood-delivey">
+    <label for="year">Select Year:</label>
+    <select name="year" id="year">
+      <!-- Options will be populated using JavaScript -->
+    </select>
+    <button onclick="getBloodDeliveriesByYear()">Get Count</button>
+    <p id="yearDeliveryCount">Delivery Count: </p>
+  </div>
 
- 
+  <!-- Blood Delivery Count by Month and Year -->
+  <h2>Blood Delivery Count by Month</h2>
+  <div class="blood-delivey">
+    <label for="year">Select Year:</label>
+    <select name="year" id="yearMonth">
+      <!-- Options will be populated using JavaScript -->
+    </select>
+    <label for="month">Select Month:</label>
+    <select name="month" id="month">
+      <!-- Options will be populated using JavaScript -->
+    </select>
+    <button onclick="getBloodDeliveriesByMonth()">Get Count</button>
+    <p id="monthDeliveryCount">Delivery Count: </p>
+  </div>
 
- </div>
+  <h2>Blood Delivery Count by Blood Bank</h2>
+  <div class="blood-delivey">
+    <label for="bloodBank">Select Blood Bank:</label>
+    <select name="bloodBank" id="bloodBank">
+      <!-- Blood bank options will be populated dynamically -->
+    </select>
+    <button onclick="fetchBloodDeliveryCount()">Get Count</button>
+    <p id="bloodBankDeliveryCount">Delivery Count: </p>
+  </div>
+  <h2>Blood Delivery Count by Blood Type</h2>
+  <div class="blood-delivey">
+    <label for="bloodType">Select Blood Type:</label>
+    <select name="bloodType" id="bloodType">
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+      <option value="AB+">AB+</option>
+      <option value="AB-">AB-</option>
+      <option value="O+">O+</option>
+      <option value="O-">O-</option>
+    </select>
+    <button onclick="fetchBloodDeliveryCountByType()">Get Count</button>
+    <p id="bloodTypeDeliveryCount">Delivery Count: </p>
+  </div>
 
- <h2>Add Doctor</h2>
- <form action="/addDoctor" method="post" onsubmit="handleAddDoctor(event)">
-   <label for="doctorName">Doctor Name:</label>
-   <input type="text" name="doctor_name" id="doctorName" required><br>
-   <label for="specialization">Specialization:</label>
-   <input type="text" name="specialization" id="specialization"><br>
-   <label for="clinicAddress">Clinic Address:</label>
-   <input type="text" name="clinic_address" id="clinicAddress"><br>
-   <label for="doctorPho">Phone Number:</label>
-   <input type="tel" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" name="phone_no"
-     id="doctorPho" required><br>
-   <label for="doc_email">Email:</label>
-   <input type="email" name="doc_email" id="doc_email" required><br>
-   <button type="submit">Add Doctor</button>
- </form>
-
+  <h2>Add Doctor</h2>
+  <form action="/addDoctor" method="post" onsubmit="handleAddDoctor(event)">
+    <label for="doctorName">Doctor Name:</label>
+    <input type="text" name="doctor_name" id="doctorName" required><br>
+    <label for="specialization">Specialization:</label>
+    <input type="text" name="specialization" id="specialization"><br>
+    <label for="clinicAddress">Clinic Address:</label>
+    <input type="text" name="clinic_address" id="clinicAddress"><br>
+    <label for="doctorPho">Phone Number:</label>
+    <input type="tel" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" name="phone_no"
+      id="doctorPho" required><br>
+    <label for="doc_email">Email:</label>
+    <input type="email" name="doc_email" id="doc_email" required><br>
+    <button type="submit">Add Doctor</button>
+  </form>
 
   <h2>Add Blood Bank</h2>
   <form action="/bloodbank" method="post" onsubmit="handleAddBloodBank(event)">
@@ -101,9 +96,8 @@
   </form>
 
   <!-- Delete Blood Bank Section -->
-
   <h2>Delete Doctor</h2>
-  <form action="/deleteDoctor" method="post">
+  <form action="/deleteDoctor" method="post" onsubmit="handleDeleteDoctor(event)">
     <label for="doctorToDelete">Select Doctor to Delete:</label>
     <select name="doctor_id_to_delete" id="doctorToDelete" required>
       <!-- Options will be dynamically populated using JavaScript -->
@@ -113,18 +107,15 @@
 
   <!-- Delete Blood Bank Section -->
   <h2>Delete Blood Bank</h2>
-  <form action="/deleteBloodBank" method="post">
+  <form action="/deleteBloodBank" method="post" onsubmit="handleDeleteBloodBank(event)">
     <label for="bloodBankToDelete">Select Blood Bank to Delete:</label>
     <select name="blood_bank_id_to_delete" id="bloodBankToDelete" required>
       <!-- Options will be dynamically populated using JavaScript -->
     </select>
     <button type="submit">Delete Blood Bank</button>
-    
   </form>
-  <a href="/index">Go to Home </a>
+  <a href="/index">Log out </a>
 
-
-  <!-- Add this script inside the <head> or at the end of the <body> -->
   <script>
     // Function to fetch data from the server
     async function fetchData(url) {
@@ -155,6 +146,7 @@
         dropdown.appendChild(option);
       });
     }
+
     function populateDropdown2(data, dropdownId) {
       const dropdown = document.getElementById(dropdownId);
 
@@ -179,8 +171,6 @@
     fetchData('/getBloodBank')
       .then(bloodBanks => populateDropdown2(bloodBanks, 'bloodBankToDelete'))
       .catch(error => console.error('Error fetching blood banks:', error));
-
-
 
     function populateDropdown(data, dropdownId) {
       const dropdown = document.getElementById(dropdownId);
@@ -256,76 +246,75 @@
     }
 
     async function fetchBloodBanks() {
-    try {
-      const response = await fetch('/getBloodBank');
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
+      try {
+        const response = await fetch('/getBloodBank');
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        return response.json();
+      } catch (error) {
+        console.error(error);
+        // Handle error appropriately, e.g., show an error message to the user
       }
-      return response.json();
-    } catch (error) {
-      console.error(error);
-      // Handle error appropriately, e.g., show an error message to the user
     }
-  }
 
-  // Function to populate dropdown with blood bank data
-  async function populateBloodBankDropdown() {
-    const bloodBankDropdown = document.getElementById('bloodBank');
+    // Function to populate dropdown with blood bank data
+    async function populateBloodBankDropdown() {
+      const bloodBankDropdown = document.getElementById('bloodBank');
 
-    // Fetch blood bank data
-    try {
-      const bloodBanks = await fetchBloodBanks();
+      // Fetch blood bank data
+      try {
+        const bloodBanks = await fetchBloodBanks();
 
-      // Clear existing options
-      bloodBankDropdown.innerHTML = '';
+        // Clear existing options
+        bloodBankDropdown.innerHTML = '';
 
-      // Populate dropdown with blood bank data
-      bloodBanks.forEach(bloodBank => {
-        const option = document.createElement('option');
-        option.value = bloodBank.blood_bank_id;
-        option.textContent = bloodBank.blood_bank_name;
-        bloodBankDropdown.appendChild(option);
-      });
-    } catch (error) {
-      console.error('Error populating blood bank dropdown:', error);
-    }
-  }
-
-  // Function to fetch blood delivery count by blood bank ID
-  async function fetchBloodDeliveryCount() {
-    const bloodBankId = document.getElementById('bloodBank').value;
-    try {
-      const response = await fetch(`/bloodDeliveriesByBloodBank/${bloodBankId}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
+        // Populate dropdown with blood bank data
+        bloodBanks.forEach(bloodBank => {
+          const option = document.createElement('option');
+          option.value = bloodBank.blood_bank_id;
+          option.textContent = bloodBank.blood_bank_name;
+          bloodBankDropdown.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Error populating blood bank dropdown:', error);
       }
-      const { deliveryCount } = await response.json();
-
-      // Display delivery count
-      document.getElementById('bloodBankDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
-    } catch (error) {
-      console.error(error);
-      // Handle error appropriately, e.g., show an error message to the user
     }
-  }
 
-  async function fetchBloodDeliveryCountByType() {
-    const bloodType = document.getElementById('bloodType').value;
-    try {
-      const response = await fetch(`/bloodDeliveriesByType/${bloodType}`);
-      if (!response.ok) {
-        throw new Error(`Error fetching data: ${response.statusText}`);
+    // Function to fetch blood delivery count by blood bank ID
+    async function fetchBloodDeliveryCount() {
+      const bloodBankId = document.getElementById('bloodBank').value;
+      try {
+        const response = await fetch(`/bloodDeliveriesByBloodBank/${bloodBankId}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        const { deliveryCount } = await response.json();
+
+        // Display delivery count
+        document.getElementById('bloodBankDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
+      } catch (error) {
+        console.error(error);
+        // Handle error appropriately, e.g., show an error message to the user
       }
-      const { deliveryCount } = await response.json();
-
-      // Display delivery count
-      document.getElementById('bloodTypeDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
-    } catch (error) {
-      console.error(error);
-      // Handle error appropriately, e.g., show an error message to the user
     }
-  }
- 
+
+    async function fetchBloodDeliveryCountByType() {
+      const bloodType = document.getElementById('bloodType').value;
+      try {
+        const response = await fetch(`/bloodDeliveriesByType/${bloodType}`);
+        if (!response.ok) {
+          throw new Error(`Error fetching data: ${response.statusText}`);
+        }
+        const { deliveryCount } = await response.json();
+
+        // Display delivery count
+        document.getElementById('bloodTypeDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
+      } catch (error) {
+        console.error(error);
+        // Handle error appropriately, e.g., show an error message to the user
+      }
+    }
 
     // Initialize the page
     (async function () {
@@ -334,67 +323,122 @@
       await populateBloodBankDropdown();
     })();
 
+    // Function to handle Add Doctor form submission
+    function handleAddDoctor(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-    // Call function to populate blood bank dropdown when the page loads
+      fetch(form.action, {
+        method: form.method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Doctor added successfully');
+            form.reset();
+            window.location.reload(); // Refresh the page after successful addition
+          } else {
+            alert('Error adding doctor');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error adding doctor');
+        });
+    }
 
-  // Function to handle Add Doctor form submission
-  function handleAddDoctor(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    // Function to handle Add Blood Bank form submission
+    function handleAddBloodBank(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-    fetch(form.action, {
-      method: form.method,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (response.ok) {
-        alert('Doctor added successfully');
-        form.reset();
-      } else {
-        alert('Error adding doctor');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Error adding doctor');
-    });
-  }
+      fetch(form.action, {
+        method: form.method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Blood bank added successfully');
+            form.reset();
+            window.location.reload(); // Refresh the page after successful addition
+          } else {
+            alert('Error adding blood bank');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error adding blood bank');
+        });
+    }
 
-  // Function to handle Add Blood Bank form submission
-  function handleAddBloodBank(event) {
-    event.preventDefault();
-    const form = event.target;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData.entries());
+    // Function to handle Delete Doctor form submission
+    function handleDeleteDoctor(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
 
-    fetch(form.action, {
-      method: form.method,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => {
-      if (response.ok) {
-        alert('Blood bank added successfully');
-        form.reset();
-      } else {
-        alert('Error adding blood bank');
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Error adding blood bank');
-    });
-  }
+      fetch(form.action, {
+        method: form.method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Doctor deleted successfully');
+            form.reset();
+            window.location.reload(); // Refresh the page after successful deletion
+          } else {
+            alert('Error deleting doctor');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error deleting doctor');
+        });
+    }
+
+    // Function to handle Delete Blood Bank form submission
+    function handleDeleteBloodBank(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      fetch(form.action, {
+        method: form.method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert('Blood bank deleted successfully');
+            form.reset();
+            window.location.reload(); // Refresh the page after successful deletion
+          } else {
+            alert('Error deleting blood bank');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error deleting blood bank');
+        });
+    }
   </script>
 </body>
-
-
 
 </html>
