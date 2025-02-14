@@ -4,20 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Auth</title>
-    <link rel="stylesheet" href ="./CSS/pat.css">
+    <link rel="stylesheet" href="./CSS/pat.css">
+    <link rel="icon" href="./Images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <h2>Admin Authetication</h2>
-    <form action="/admin" method="post">
-        
-        <label for="AdminUsername">Admin Username:</label>
-        <input type="text" name="username" id="AdminUsername" required> <br>
-        <label for="AdminPass">Admin Password:</label>
-        <input type="password" name="password" id="AdminPass" required> <br>
-
-        <button type="submit">Submit</button>
-
-    </form>
-    
+    <div class="wrapper">
+        <div class="container">
+            <div class="col-left">
+                <div class="login-image">
+                    <img src="./Images/blood-drop-icon-cartoon-style-vector.png" alt="Welcome Back" style="width:50%; height:auto;">
+                </div>
+            </div>
+            <div class="col-right">
+                <div class="login-form">
+                    <h2>Admin Authentication</h2>
+                    <form action="/admin" method="post">
+                        <p>
+                            <label for="AdminUsername">Admin Username:</label>
+                            <input type="text" name="username" id="AdminUsername" required>
+                        </p>
+                        <p>
+                            <label for="AdminPass">Admin Password:</label>
+                            <input type="password" name="password" id="AdminPass" required>
+                        </p>
+                        <p>
+                            <input type="submit" value="Submit">
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
