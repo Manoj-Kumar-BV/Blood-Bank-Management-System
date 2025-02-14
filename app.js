@@ -42,22 +42,19 @@ async function AdminAuth(req, res, next) {
 
 }
 async function query(data) {
-    const response = await fetch(
-        "https://api-inference.huggingface.co/models/mdizak/text-summarizer-bart-large-cnn-samsum-rust",
-        {
-            headers: { Authorization: "Bearer " + process.env.HUGGING_FACE },
-            method: "POST",
-            body: JSON.stringify({
-                inputs: data,
-                options: {
-                    use_cache: true,         // default
-                    wait_for_model: true    // Set to true to wait for the model
-                }
-            }),
-        }
-    );
-    const result = await response.json();
-    return result;
+	const response = await fetch(
+		"https://router.huggingface.co/hf-inference/models/philschmid/bart-large-cnn-samsum",
+		{
+			headers: {
+				Authorization: "Bearer" + process.env.HUGGINGFACE_API_KEY,
+				"Content-Type": "application/json",
+			},
+			method: "POST",
+			body: JSON.stringify(data),
+		}
+	);
+	const result = await response.json();
+	return result;
 }
 
 app.get("/admin", (req, res) => {
@@ -165,24 +162,26 @@ ${patientData.familyHistory.map(item => `- ${item}`).join('\n')}
 **Social History:**
 ${patientData.socialHistory}`;
 
-    try {
-      const huggingFaceResponse = await query(template);
+        // console.log(template);
+        // 
+        const huggingFaceResponse = await query({ "inputs": template }).then((response) => {
+            // console.log(JSON.stringify(response));
+            return response;
+        });
 
-      if (huggingFaceResponse && huggingFaceResponse[0] && huggingFaceResponse[0].generated_text) {
-        console.log(huggingFaceResponse[0].generated_text);
-        Donorfeedback.create({ key: id, report: huggingFaceResponse[0].generated_text });
-      } else {
-        console.error('Error: huggingFaceResponse[0] is undefined or does not contain generated_text');
-        Donorfeedback.create({ key: id, report: 'No generated text available' });
-      }
-    } catch (error) {
-      console.error('Error querying Hugging Face:', error);
-      Donorfeedback.create({ key: id, report: 'Error querying Hugging Face' });
-    }
+        // Process the Hugging Face API response as needed
+        if (huggingFaceResponse && huggingFaceResponse.length > 0) {
+            // console.log(huggingFaceResponse[0].summary_text);
+            Donorfeedback.create({ key: id, report: huggingFaceResponse[0].summary_text });
+        } else {
+            console.error('Hugging Face API response is empty or invalid');
+        }
 
-    // Execute the blood query
-    executeQuery(bloodQuery, res);
-  });
+        // Execute the blood query
+        executeQuery(bloodQuery, res);
+    });
+
+
 });
 
 app.get("/patient", (req, res) => {
