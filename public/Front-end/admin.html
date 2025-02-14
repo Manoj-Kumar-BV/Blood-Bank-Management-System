@@ -7,116 +7,263 @@
   <title>Node.js SQL Insert</title>
   <link rel="icon" href="./Images/favicon.ico" type="image/x-icon">
   <link href="./CSS/adm.css" rel="stylesheet">
+  <style>
+    body {
+      background-image: url('./Images/blood-bank.png'); 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      display: flex;
+      transition: margin-left 0.3s;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 15px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+      position: fixed;
+      top: 0;
+      left: -250px;
+      height: 100%;
+      transition: left 0.3s;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+      color: #333;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .sidebar a:hover {
+      background-color: #ddd;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .content {
+      flex-grow: 1;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      margin-left: 20px;
+      border-radius: 10px;
+      transition: margin-left 0.3s;
+    }
+    .content.collapsed {
+      margin-left: 270px;
+    }
+    .hidden {
+      display: none;
+    }
+    .menu-toggle {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    @media (max-width: 768px) {
+      body {
+        margin-left: 0;
+      }
+      .content {
+        margin-left: 0;
+      }
+      .sidebar {
+        width: 100%;
+        left: -100%;
+      }
+      .sidebar.open {
+        left: 0;
+      }
+      .menu-toggle {
+        left: 15px;
+        top: 15px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
-  <!-- Blood Delivery Count by Year -->
-  <h2>Blood Delivery Count by Year</h2>
-  <div class="blood-delivey">
-    <label for="year">Select Year:</label>
-    <select name="year" id="year">
-      <!-- Options will be populated using JavaScript -->
-    </select>
-    <button onclick="getBloodDeliveriesByYear()">Get Count</button>
-    <p id="yearDeliveryCount">Delivery Count: </p>
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+  <div class="sidebar">
+    <a href="#" onclick="showSection('overview')">Home</a>
+    <a href="#" onclick="showSection('bloodDeliveryYear')">Blood Delivery Count by Year</a>
+    <a href="#" onclick="showSection('bloodDeliveryMonth')">Blood Delivery Count by Month</a>
+    <a href="#" onclick="showSection('bloodDeliveryBank')">Blood Delivery Count by Blood Bank</a>
+    <a href="#" onclick="showSection('bloodDeliveryType')">Blood Delivery Count by Blood Type</a>
+    <a href="#" onclick="showSection('addDoctor')">Add Doctor</a>
+    <a href="#" onclick="showSection('addBloodBank')">Add Blood Bank</a>
+    <a href="#" onclick="confirmAction('deleteDoctor')">Delete Doctor</a>
+    <a href="#" onclick="confirmAction('deleteBloodBank')">Delete Blood Bank</a>
+    <a href="#" onclick="confirmAction('logout')">Log out</a>
   </div>
 
-  <!-- Blood Delivery Count by Month and Year -->
-  <h2>Blood Delivery Count by Month</h2>
-  <div class="blood-delivey">
-    <label for="year">Select Year:</label>
-    <select name="year" id="yearMonth">
-      <!-- Options will be populated using JavaScript -->
-    </select>
-    <label for="month">Select Month:</label>
-    <select name="month" id="month">
-      <!-- Options will be populated using JavaScript -->
-    </select>
-    <button onclick="getBloodDeliveriesByMonth()">Get Count</button>
-    <p id="monthDeliveryCount">Delivery Count: </p>
+  <div class="content">
+    <div id="overview">
+      <h2>Welcome</h2>
+      <p>Welcome to the Blood Bank Management System. Use the sidebar to navigate through different functionalities.</p>
+      <blockquote>
+        <p>"The blood you donate gives someone another chance at life."</p>
+        <p>"A single pint can save three lives, a single gesture can create a million smiles."</p>
+        <p>"Donate blood and be the reason for someone's heartbeat."</p>
+        <p>"Your blood donation can give a precious smile to someone's face."</p>
+      </blockquote>
+    </div>
+
+    <div id="bloodDeliveryYear" class="hidden">
+      <h2>Blood Delivery Count by Year</h2>
+      <div class="blood-delivey">
+        <label for="year">Select Year:</label>
+        <select name="year" id="year">
+          <!-- Options will be populated using JavaScript -->
+        </select>
+        <button onclick="getBloodDeliveriesByYear()">Get Count</button>
+        <p id="yearDeliveryCount">Delivery Count: </p>
+        
+      </div>
+    </div>
+
+    <div id="bloodDeliveryMonth" class="hidden">
+      <h2>Blood Delivery Count by Month</h2>
+      <div class="blood-delivey">
+        <label for="year">Select Year:</label>
+        <select name="year" id="yearMonth">
+          <!-- Options will be populated using JavaScript -->
+        </select>
+        <label for="month">Select Month:</label>
+        <select name="month" id="month">
+          <!-- Options will be populated using JavaScript -->
+        </select>
+        <button onclick="getBloodDeliveriesByMonth()">Get Count</button>
+        <p id="monthDeliveryCount">Delivery Count: </p>
+        
+      </div>
+    </div>
+
+    <div id="bloodDeliveryBank" class="hidden">
+      <h2>Blood Delivery Count by Blood Bank</h2>
+      <div class="blood-delivey">
+        <label for="bloodBank">Select Blood Bank:</label>
+        <select name="bloodBank" id="bloodBank">
+          <!-- Blood bank options will be populated dynamically -->
+        </select>
+        <button onclick="fetchBloodDeliveryCount()">Get Count</button>
+        <p id="bloodBankDeliveryCount">Delivery Count: </p>
+        
+      </div>
+    </div>
+
+    <div id="bloodDeliveryType" class="hidden">
+      <h2>Blood Delivery Count by Blood Type</h2>
+      <div class="blood-delivey">
+        <label for="bloodType">Select Blood Type:</label>
+        <select name="bloodType" id="bloodType">
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+        </select>
+        <button onclick="fetchBloodDeliveryCountByType()">Get Count</button>
+        <p id="bloodTypeDeliveryCount">Delivery Count: </p>
+        
+      </div>
+    </div>
+
+    <div id="addDoctor" class="hidden">
+      <h2>Add Doctor</h2>
+      <form action="/addDoctor" method="post" onsubmit="handleAddDoctor(event)">
+        <label for="doctorName">Doctor Name:</label>
+        <input type="text" name="doctor_name" id="doctorName" required><br>
+        <label for="specialization">Specialization:</label>
+        <input type="text" name="specialization" id="specialization"><br>
+        <label for="clinicAddress">Clinic Address:</label>
+        <input type="text" name="clinic_address" id="clinicAddress"><br>
+        <label for="doctorPho">Phone Number:</label>
+        <input type="tel" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" name="phone_no"
+          id="doctorPho" required><br>
+        <label for="doc_email">Email:</label>
+        <input type="email" name="doc_email" id="doc_email" required><br>
+        <button type="submit">Add Doctor</button>
+      </form>
+    </div>
+
+    <div id="addBloodBank" class="hidden">
+      <h2>Add Blood Bank</h2>
+      <form action="/bloodbank" method="post" onsubmit="handleAddBloodBank(event)">
+        <label for="bankName">Blood Bank Name: </label>
+        <input type="text" name="blood_bank_name" id="bankName" required><br>
+        <label for="address">Address: </label>
+        <input type="text" name="address" id="address" required><br>
+        <label for="contactNumber">Contact Number: </label>
+        <input type="tel" name="contact_number" id="contactNumber" required><br>
+        <label for="bb_email">Email: </label>
+        <input type="email" name="bb_email" id="bb_email" required><br>
+        <label for="managerName">Manager Name: </label>
+        <input type="text" name="manager_name" id="managerName" required><br>
+        <label for="operatingHours">Operating Hours: </label>
+        <input type="text" name="operating_hours" id="operatingHours" required><br>
+        <button type="submit">Add Blood Bank</button>
+      </form>
+    </div>
+
+    <div id="deleteDoctor" class="hidden">
+      <h2>Delete Doctor</h2>
+      <form action="/deleteDoctor" method="post" onsubmit="handleDeleteDoctor(event)">
+        <label for="doctorToDelete">Select Doctor to Delete:</label>
+        <select name="doctor_id_to_delete" id="doctorToDelete" required>
+          <!-- Options will be dynamically populated using JavaScript -->
+        </select>
+        <button type="submit">Delete Doctor</button>
+      </form>
+    </div>
+
+    <div id="deleteBloodBank" class="hidden">
+      <h2>Delete Blood Bank</h2>
+      <form action="/deleteBloodBank" method="post" onsubmit="handleDeleteBloodBank(event)">
+        <label for="bloodBankToDelete">Select Blood Bank to Delete:</label>
+        <select name="blood_bank_id_to_delete" id="bloodBankToDelete" required>
+          <!-- Options will be dynamically populated using JavaScript -->
+        </select>
+        <button type="submit">Delete Blood Bank</button>
+      </form>
+    </div>
   </div>
-
-  <h2>Blood Delivery Count by Blood Bank</h2>
-  <div class="blood-delivey">
-    <label for="bloodBank">Select Blood Bank:</label>
-    <select name="bloodBank" id="bloodBank">
-      <!-- Blood bank options will be populated dynamically -->
-    </select>
-    <button onclick="fetchBloodDeliveryCount()">Get Count</button>
-    <p id="bloodBankDeliveryCount">Delivery Count: </p>
-  </div>
-  <h2>Blood Delivery Count by Blood Type</h2>
-  <div class="blood-delivey">
-    <label for="bloodType">Select Blood Type:</label>
-    <select name="bloodType" id="bloodType">
-      <option value="A+">A+</option>
-      <option value="A-">A-</option>
-      <option value="B+">B+</option>
-      <option value="B-">B-</option>
-      <option value="AB+">AB+</option>
-      <option value="AB-">AB-</option>
-      <option value="O+">O+</option>
-      <option value="O-">O-</option>
-    </select>
-    <button onclick="fetchBloodDeliveryCountByType()">Get Count</button>
-    <p id="bloodTypeDeliveryCount">Delivery Count: </p>
-  </div>
-
-  <h2>Add Doctor</h2>
-  <form action="/addDoctor" method="post" onsubmit="handleAddDoctor(event)">
-    <label for="doctorName">Doctor Name:</label>
-    <input type="text" name="doctor_name" id="doctorName" required><br>
-    <label for="specialization">Specialization:</label>
-    <input type="text" name="specialization" id="specialization"><br>
-    <label for="clinicAddress">Clinic Address:</label>
-    <input type="text" name="clinic_address" id="clinicAddress"><br>
-    <label for="doctorPho">Phone Number:</label>
-    <input type="tel" pattern="[0-9]{10}" title="Please enter a valid 10-digit phone number" name="phone_no"
-      id="doctorPho" required><br>
-    <label for="doc_email">Email:</label>
-    <input type="email" name="doc_email" id="doc_email" required><br>
-    <button type="submit">Add Doctor</button>
-  </form>
-
-  <h2>Add Blood Bank</h2>
-  <form action="/bloodbank" method="post" onsubmit="handleAddBloodBank(event)">
-    <label for="bankName">Blood Bank Name: </label>
-    <input type="text" name="blood_bank_name" id="bankName" required><br>
-    <label for="address">Address: </label>
-    <input type="text" name="address" id="address" required><br>
-    <label for="contactNumber">Contact Number: </label>
-    <input type="tel" name="contact_number" id="contactNumber" required><br>
-    <label for="bb_email">Email: </label>
-    <input type="email" name="bb_email" id="bb_email" required><br>
-    <label for="managerName">Manager Name: </label>
-    <input type="text" name="manager_name" id="managerName" required><br>
-    <label for="operatingHours">Operating Hours: </label>
-    <input type="text" name="operating_hours" id="operatingHours" required><br>
-    <button type="submit">Add Blood Bank</button>
-  </form>
-
-  <!-- Delete Blood Bank Section -->
-  <h2>Delete Doctor</h2>
-  <form action="/deleteDoctor" method="post" onsubmit="handleDeleteDoctor(event)">
-    <label for="doctorToDelete">Select Doctor to Delete:</label>
-    <select name="doctor_id_to_delete" id="doctorToDelete" required>
-      <!-- Options will be dynamically populated using JavaScript -->
-    </select>
-    <button type="submit">Delete Doctor</button>
-  </form>
-
-  <!-- Delete Blood Bank Section -->
-  <h2>Delete Blood Bank</h2>
-  <form action="/deleteBloodBank" method="post" onsubmit="handleDeleteBloodBank(event)">
-    <label for="bloodBankToDelete">Select Blood Bank to Delete:</label>
-    <select name="blood_bank_id_to_delete" id="bloodBankToDelete" required>
-      <!-- Options will be dynamically populated using JavaScript -->
-    </select>
-    <button type="submit">Delete Blood Bank</button>
-  </form>
-  <a href="/index">Log out </a>
 
   <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const content = document.querySelector('.content');
+      sidebar.classList.toggle('open');
+      content.classList.toggle('collapsed');
+    }
+
+    function showSection(sectionId) {
+      const sections = document.querySelectorAll('.content > div');
+      sections.forEach(section => {
+        if (section.id === sectionId) {
+          section.classList.remove('hidden');
+        } else {
+          section.classList.add('hidden');
+        }
+      });
+      if (window.innerWidth <= 768) {
+        toggleSidebar();
+      }
+    }
+
     // Function to fetch data from the server
     async function fetchData(url) {
       try {
@@ -212,7 +359,7 @@
       );
     }
 
-    // Get blood delivery count by year
+    // Get blood delivery count by year and render chart
     async function getBloodDeliveriesByYear() {
       const year = document.getElementById('year').value;
       try {
@@ -222,13 +369,17 @@
         }
         const data = await response.json();
         document.getElementById('yearDeliveryCount').textContent = `Delivery Count: ${data.deliveryCount}`;
+        
+        // Render chart
+        const ctx = document.getElementById('yearChart').getContext('2d');
+        renderChart(ctx, [year], [data.deliveryCount], 'Blood Deliveries by Year');
       } catch (error) {
         console.error(error);
         // Handle error appropriately, e.g., show an error message to the user
       }
     }
 
-    // Get blood delivery count by month
+    // Get blood delivery count by month and render chart
     async function getBloodDeliveriesByMonth() {
       const year = document.getElementById('yearMonth').value;
       const month = document.getElementById('month').value;
@@ -239,6 +390,10 @@
         }
         const data = await response.json();
         document.getElementById('monthDeliveryCount').textContent = `Delivery Count: ${data.deliveryCount}`;
+        
+        // Render chart
+        const ctx = document.getElementById('monthChart').getContext('2d');
+        renderChart(ctx, [`${year}-${month}`], [data.deliveryCount], 'Blood Deliveries by Month');
       } catch (error) {
         console.error(error);
         // Handle error appropriately, e.g., show an error message to the user
@@ -281,7 +436,7 @@
       }
     }
 
-    // Function to fetch blood delivery count by blood bank ID
+    // Function to fetch blood delivery count by blood bank ID and render chart
     async function fetchBloodDeliveryCount() {
       const bloodBankId = document.getElementById('bloodBank').value;
       try {
@@ -290,15 +445,18 @@
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const { deliveryCount } = await response.json();
-
-        // Display delivery count
         document.getElementById('bloodBankDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
+        
+        // Render chart
+        const ctx = document.getElementById('bankChart').getContext('2d');
+        renderChart(ctx, [bloodBankId], [deliveryCount], 'Blood Deliveries by Blood Bank');
       } catch (error) {
         console.error(error);
         // Handle error appropriately, e.g., show an error message to the user
       }
     }
 
+    // Fetch blood delivery count by blood type and render chart
     async function fetchBloodDeliveryCountByType() {
       const bloodType = document.getElementById('bloodType').value;
       try {
@@ -307,13 +465,39 @@
           throw new Error(`Error fetching data: ${response.statusText}`);
         }
         const { deliveryCount } = await response.json();
-
-        // Display delivery count
         document.getElementById('bloodTypeDeliveryCount').textContent = `Delivery Count: ${deliveryCount}`;
+        
+        // Render chart
+        const ctx = document.getElementById('typeChart').getContext('2d');
+        renderChart(ctx, [bloodType], [deliveryCount], 'Blood Deliveries by Blood Type');
       } catch (error) {
         console.error(error);
         // Handle error appropriately, e.g., show an error message to the user
       }
+    }
+
+    // Function to render chart
+    function renderChart(ctx, labels, data, label) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: label,
+            data: data,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
     }
 
     // Initialize the page
@@ -384,6 +568,9 @@
     // Function to handle Delete Doctor form submission
     function handleDeleteDoctor(event) {
       event.preventDefault();
+      const confirmation = confirm("Are you sure you want to delete this doctor?");
+      if (!confirmation) return;
+
       const form = event.target;
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
@@ -413,6 +600,9 @@
     // Function to handle Delete Blood Bank form submission
     function handleDeleteBloodBank(event) {
       event.preventDefault();
+      const confirmation = confirm("Are you sure you want to delete this blood bank?");
+      if (!confirmation) return;
+
       const form = event.target;
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
@@ -437,6 +627,17 @@
           console.error('Error:', error);
           alert('Error deleting blood bank');
         });
+    }
+
+    function confirmAction(action) {
+      const confirmation = confirm("Are you sure you want to proceed?");
+      if (confirmation) {
+        if (action === 'logout') {
+          window.location.href = '/index';
+        } else {
+          showSection(action);
+        }
+      }
     }
   </script>
 </body>
