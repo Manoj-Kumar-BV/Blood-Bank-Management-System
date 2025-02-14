@@ -46,7 +46,7 @@ async function query(data) {
 		"https://router.huggingface.co/hf-inference/models/philschmid/bart-large-cnn-samsum",
 		{
 			headers: {
-				Authorization: "Bearer" + process.env.HUGGINGFACE_API_KEY,
+				Authorization: "Bearer" + process.env.HUGGING_FACE,
 				"Content-Type": "application/json",
 			},
 			method: "POST",
