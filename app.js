@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public', 'Front-end')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Admin.create({username:"test",password:"test123"})
+Admin.create({username:"test",password:"test123"})
 
 async function AdminAuth(req, res, next) {
     
