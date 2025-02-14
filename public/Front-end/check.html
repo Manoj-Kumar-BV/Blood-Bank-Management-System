@@ -8,8 +8,31 @@
     <title>Blood Donation System</title>
     <link rel="icon" href="./Images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="./CSS/ind.css"> <!-- Add your CSS file link here -->
+    <style>
+        body {
+            background-image: url('blood-donation-background.jpg'); /* Use an image related to blood donation */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        /* Add responsive design */
+        @media (max-width: 600px) {
+            header, main, footer {
+                padding: 10px;
+                text-align: center;
+            }
+            .lis {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .lis li {
+                margin: 10px 0;
+            }
+        }
+    </style>
 </head>
-<body style="background-image: url('download.jpeg');">
+<body>
     <header>
         <h1>Welcome to the Blood Donation System</h1>
         <p>Your one-stop solution for blood donation and requests</p>
@@ -19,9 +42,9 @@
         <section id="options">
             <h2>Choose an Option</h2>
             <ul class="lis">
-                <li><a href="/donor">Wanna Donate Blood</a></li>
-                <li><a href="/patient">In Need of Blood</a></li>
-                <li><a href="/admin">Admin Login</a></li>
+                <li><a href="/donor" onclick="showMessage('Thank you for your willingness to donate!')">Wanna Donate Blood</a></li>
+                <li><a href="/patient" onclick="showMessage('We are here to help you find the blood you need!')">In Need of Blood</a></li>
+                <li><a href="/admin" onclick="showMessage('Admin login portal')">Admin Login</a></li>
             </ul>
         </section>
 
@@ -31,5 +54,10 @@
     <footer>
         <p>&copy; 2025 Blood Donation System. All rights reserved.</p>
     </footer>
+    <script>
+        function showMessage(message) {
+            alert(message);
+        }
+    </script>
 </body>
 </html>
