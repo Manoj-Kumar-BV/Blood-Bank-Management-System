@@ -46,7 +46,7 @@ async function query(data) {
 		"https://router.huggingface.co/hf-inference/models/philschmid/bart-large-cnn-samsum",
 		{
 			headers: {
-				Authorization: "Bearer" + process.env.HUGGING_FACE,
+				Authorization: `Bearer ${process.env.HF_API_KEY}`,
 				"Content-Type": "application/json",
 			},
 			method: "POST",
@@ -160,7 +160,9 @@ ${patientData.allergies.length > 0 ? patientData.allergies.map(item => `- ${item
 ${patientData.familyHistory.map(item => `- ${item}`).join('\n')}
 
 **Social History:**
-${patientData.socialHistory}`;
+${patientData.socialHistory}
+
+Summarize these points.`;
 
         // console.log(template);
         // 
@@ -171,7 +173,7 @@ ${patientData.socialHistory}`;
 
         // Process the Hugging Face API response as needed
         if (huggingFaceResponse && huggingFaceResponse.length > 0) {
-            // console.log(huggingFaceResponse[0].summary_text);
+            console.log(huggingFaceResponse[0].summary_text);
             Donorfeedback.create({ key: id, report: huggingFaceResponse[0].summary_text });
         } else {
             console.error('Hugging Face API response is empty or invalid');
