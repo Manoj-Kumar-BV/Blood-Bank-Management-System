@@ -101,11 +101,103 @@
 
     </div>
 
+    <!-- Chatbot Button -->
+    <div id="chatbot" class="chatbot-container">
+        <button id="chatbotButton" class="chatbot-button">Chat with us</button>
+        <div id="chatbox" class="chatbox">
+            <div id="chatboxHeader" class="chatbox-header">
+                <span>Chatbot</span>
+                <button id="closeChatbox" class="close-chatbox">X</button>
+            </div>
+            <div id="chatboxBody" class="chatbox-body">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="chatbox-footer">
+                <input type="text" id="chatInput" class="chat-input" placeholder="Type your query here...">
+                <button id="sendChat" class="send-chat">Send</button>
+            </div>
+        </div>
+    </div>
 
+    <style>
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chatbot-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chatbox {
+            display: none;
+            flex-direction: column;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chatbox-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .chatbox-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+        }
+
+        .chatbox-footer {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ccc;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .send-chat {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .close-chatbox {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+
+    <script src="./config.js"></script> <!-- Load the API key -->
     <script>
-
-
-
         document.addEventListener('DOMContentLoaded', function () {
             // Fetch doctors from the server and populate the dropdown
             fetchDoctors();
@@ -205,9 +297,238 @@
             return true;
         }
 
+        async function query(data) {
+            try {
+                const response = await fetch(
+                    "https://api-inference.huggingface.co/models/deepset/roberta-base-squad2",
+                    {
+                        headers: {
+                            Authorization: `Bearer ${CHATBOT_API_KEY}`,
+                            "Content-Type": "application/json",
+                        },
+                        method: "POST",
+                        body: JSON.stringify(data),
+                    }
+                );
+                const result = await response.json();
+                console.log('Query result:', result); // Debugging: log the result
+                return result;
+            } catch (error) {
+                console.error('Error querying the model:', error); // Debugging: log any errors
+                return { answer: "Sorry, there was an error processing your request." };
+            }
+        }
+
+        document.getElementById('chatbotButton').addEventListener('click', function () {
+            document.getElementById('chatbox').style.display = 'flex';
+        });
+
+        document.getElementById('closeChatbox').addEventListener('click', function () {
+            document.getElementById('chatbox').style.display = 'none';
+        });
+
+        document.getElementById('sendChat').addEventListener('click', async function () {
+            const chatInput = document.getElementById('chatInput');
+            const chatboxBody = document.getElementById('chatboxBody');
+            const message = chatInput.value.trim();
+
+            if (message) {
+                const userMessage = document.createElement('div');
+                userMessage.textContent = message;
+                userMessage.style.textAlign = 'right';
+                chatboxBody.appendChild(userMessage);
+                chatInput.value = '';
+
+                // Query the Hugging Face model
+                const response = await query({
+                    "inputs": {
+                        "question": message,
+                        "context": questions.map(q => q.context).join(" ")
+                    }
+                });
+
+                console.log('Chatbot response:', response); // Print response to console
+
+                const botMessage = document.createElement('div');
+                botMessage.textContent = response.answer || "Sorry, I don't understand the question.";
+                botMessage.style.textAlign = 'left';
+                chatboxBody.appendChild(botMessage);
+                chatboxBody.scrollTop = chatboxBody.scrollHeight;
+            }
+        });
+
+        // Function to handle multiple questions
+        async function handleMultipleQuestions(questions) {
+            for (const q of questions) {
+                const response = await query({
+                    "inputs": {
+                        "question": q.question,
+                        "context": q.context
+                    }
+                });
+                console.log(`Question: ${q.question}`);
+                console.log(`Answer: ${response.answer}`);
+            }
+        }
+
+        // Example usage:
+        const questions = [
+            {
+                "question": "Who can donate blood?",
+                "context": "A healthy person aged 18-65, weighing more than 50kg, can donate blood."
+            },
+            {
+                "question": "How often can I donate blood?",
+                "context": "The interval between donations should be at least 3 months for men and 4 months for women."
+            },
+            {
+                "question": "How much blood is taken during donation?",
+                "context": "Generally, about 350-450ml of blood is collected per donation."
+            },
+            {
+                "question": "Does blood donation hurt?",
+                "context": "No, you may feel a slight prick when the needle is inserted, but it’s not painful."
+            },
+            {
+                "question": "What should I eat before donating blood?",
+                "context": "Eat iron-rich foods like spinach, beans, and meat, and stay hydrated."
+            },
+            {
+                "question": "Can I donate blood if I have a tattoo?",
+                "context": "Yes, but you must wait at least 6 months after getting a tattoo or piercing."
+            },
+            {
+                "question": "Can I donate blood if I am taking medication?",
+                "context": "It depends on the medication. Some medicines like antibiotics may require you to wait before donating."
+            },
+            {
+                "question": "How long does the blood donation process take?",
+                "context": "The process takes about 10-15 minutes, but the entire visit may take an hour."
+            },
+            {
+                "question": "Will donating blood make me weak?",
+                "context": "No, a healthy diet replenishes the lost blood quickly."
+            },
+            {
+                "question": "Can a diabetic person donate blood?",
+                "context": "Yes, if the diabetes is under control and no insulin injections are taken."
+            },
+            {
+                "question": "What are the different blood groups?",
+                "context": "The four main blood groups are A, B, AB, and O."
+            },
+            {
+                "question": "Which blood type is the universal donor?",
+                "context": "O-negative blood is the universal donor."
+            },
+            {
+                "question": "Which blood type is the universal recipient?",
+                "context": "AB-positive blood is the universal recipient."
+            },
+            {
+                "question": "Why is O-negative blood important?",
+                "context": "It can be given to any blood type, especially in emergencies."
+            },
+            {
+                "question": "Can an O-positive person donate to an A-positive person?",
+                "context": "No, O-positive can only donate to O-positive, A-positive, B-positive, and AB-positive."
+            },
+            {
+                "question": "Which blood type is rarest in India?",
+                "context": "AB-negative is one of the rarest blood types in India."
+            },
+            {
+                "question": "What is Rh factor in blood?",
+                "context": "It is a protein in red blood cells. If present, you are Rh-positive; if absent, you are Rh-negative."
+            },
+            {
+                "question": "Can Rh-negative receive Rh-positive blood?",
+                "context": "No, Rh-negative individuals can only receive Rh-negative blood."
+            },
+            {
+                "question": "Can a person with AB blood donate to an O person?",
+                "context": "No, AB blood can only be given to AB recipients."
+            },
+            {
+                "question": "Can siblings have different blood types?",
+                "context": "Yes, because blood type inheritance depends on parental genetics."
+            },
+            {
+                "question": "How is donated blood stored?",
+                "context": "It is stored in sterile bags and refrigerated at 1-6°C."
+            },
+            {
+                "question": "How long can donated blood be stored?",
+                "context": "Red blood cells can be stored for up to 42 days, while plasma can be frozen for a year."
+            },
+            {
+                "question": "What happens to donated blood?",
+                "context": "It is tested, separated into components (red cells, plasma, platelets), and stored for use."
+            },
+            {
+                "question": "Can I get infected by donating blood?",
+                "context": "No, all needles and equipment are sterile and used only once."
+            },
+            {
+                "question": "Why do blood banks need regular donations?",
+                "context": "Blood has a short shelf life, and regular donations ensure availability."
+            },
+            {
+                "question": "Can my blood be rejected by a blood bank?",
+                "context": "Yes, if tests show infections like Hepatitis or HIV, or if the blood is of poor quality."
+            },
+            {
+                "question": "Is blood tested before transfusion?",
+                "context": "Yes, it is tested for infections, blood type, and quality."
+            },
+            {
+                "question": "What is plasma donation?",
+                "context": "It is the donation of the liquid part of blood, which contains proteins and nutrients."
+            },
+            {
+                "question": "Can I donate blood if I recently recovered from COVID-19?",
+                "context": "Yes, but you must wait at least 28 days after recovery."
+            },
+            {
+                "question": "Can I donate blood if I have high blood pressure?",
+                "context": "Yes, if your BP is controlled and within a safe range at the time of donation."
+            },
+            {
+                "question": "Can I donate blood if I drink alcohol?",
+                "context": "You should avoid alcohol 24 hours before donating blood."
+            },
+            {
+                "question": "Can I donate blood if I had malaria?",
+                "context": "You must wait at least 3 months after full recovery."
+            },
+            {
+                "question": "Where can I donate blood?",
+                "context": "At hospitals, blood banks, or blood donation camps."
+            },
+            {
+                "question": "How can I register as a blood donor?",
+                "context": "Visit a blood bank or register online on blood donor platforms."
+            },
+            {
+                "question": "Do blood banks charge for blood?",
+                "context": "They charge for processing and storage, but not for the blood itself."
+            },
+            {
+                "question": "Are blood donations voluntary in India?",
+                "context": "Yes, most donations are voluntary."
+            },
+            {
+                "question": "Can I request blood from a blood bank in an emergency?",
+                "context": "Yes, by contacting the nearest blood bank or hospital."
+            },
+            {
+                "question": "Is there a mobile app for finding blood donors?",
+                "context": "Yes, apps like BloodConnect and Blood Donors India help find donors."
+            }
+        ];
+
+        handleMultipleQuestions(questions);
     </script>
-
-
 
 </body>
 

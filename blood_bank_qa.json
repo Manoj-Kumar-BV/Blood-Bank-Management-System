@@ -1,0 +1,195 @@
+{
+    "version": "1.0",
+    "data": [
+      {
+        "title": "Blood Donation",
+        "paragraphs": [
+          {
+            "context": "A healthy person aged 18-65, weighing more than 50kg, can donate blood. The interval between donations should be at least 3 months for men and 4 months for women. Generally, about 350-450ml of blood is collected per donation. Blood donation does not cause weakness, and donors should eat iron-rich foods before donation.",
+            "qas": [
+              {
+                "question": "Who can donate blood?",
+                "id": "1",
+                "answers": [
+                  { "text": "A healthy person aged 18-65, weighing more than 50kg", "answer_start": 2 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "How often can I donate blood?",
+                "id": "2",
+                "answers": [
+                  { "text": "at least 3 months for men and 4 months for women", "answer_start": 74 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "How much blood is taken during donation?",
+                "id": "3",
+                "answers": [
+                  { "text": "about 350-450ml of blood", "answer_start": 135 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Will donating blood make me weak?",
+                "id": "4",
+                "answers": [
+                  { "text": "No, a healthy diet replenishes the lost blood quickly.", "answer_start": 215 }
+                ],
+                "is_impossible": false
+              }
+            ]
+          },
+          {
+            "context": "The four main blood groups are A, B, AB, and O. O-negative blood is the universal donor, while AB-positive blood is the universal recipient. O-positive can donate to A-positive, B-positive, AB-positive, and O-positive. AB-negative is one of the rarest blood types in India.",
+            "qas": [
+              {
+                "question": "What are the different blood groups?",
+                "id": "5",
+                "answers": [
+                  { "text": "A, B, AB, and O", "answer_start": 27 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Which blood type is the universal donor?",
+                "id": "6",
+                "answers": [
+                  { "text": "O-negative", "answer_start": 60 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Which blood type is the universal recipient?",
+                "id": "7",
+                "answers": [
+                  { "text": "AB-positive", "answer_start": 105 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Which blood type is rarest in India?",
+                "id": "8",
+                "answers": [
+                  { "text": "AB-negative", "answer_start": 187 }
+                ],
+                "is_impossible": false
+              }
+            ]
+          },
+          {
+            "context": "Blood is stored in sterile bags and refrigerated at 1-6°C. Red blood cells can be stored for up to 42 days, while plasma can be frozen for a year. Donated blood is tested for infections, blood type, and quality before use. Blood banks rely on regular donations as blood has a short shelf life.",
+            "qas": [
+              {
+                "question": "How is donated blood stored?",
+                "id": "9",
+                "answers": [
+                  { "text": "In sterile bags and refrigerated at 1-6°C", "answer_start": 16 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "How long can donated blood be stored?",
+                "id": "10",
+                "answers": [
+                  { "text": "Red blood cells can be stored for up to 42 days", "answer_start": 61 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Is blood tested before transfusion?",
+                "id": "11",
+                "answers": [
+                  { "text": "Yes, it is tested for infections, blood type, and quality", "answer_start": 134 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Why do blood banks need regular donations?",
+                "id": "12",
+                "answers": [
+                  { "text": "Blood has a short shelf life", "answer_start": 202 }
+                ],
+                "is_impossible": false
+              }
+            ]
+          },
+          {
+            "context": "A person with diabetes can donate blood if their condition is under control and they do not take insulin injections. People with high blood pressure can donate if their BP is within a safe range at the time of donation. If you recently recovered from COVID-19, you must wait at least 28 days before donating. Those who have had malaria must wait at least 3 months after full recovery.",
+            "qas": [
+              {
+                "question": "Can a diabetic person donate blood?",
+                "id": "13",
+                "answers": [
+                  { "text": "Yes, if the diabetes is under control and no insulin injections are taken", "answer_start": 2 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Can I donate blood if I have high blood pressure?",
+                "id": "14",
+                "answers": [
+                  { "text": "Yes, if your BP is controlled and within a safe range at the time of donation", "answer_start": 101 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Can I donate blood if I recently recovered from COVID-19?",
+                "id": "15",
+                "answers": [
+                  { "text": "Yes, but you must wait at least 28 days after recovery", "answer_start": 179 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Can I donate blood if I had malaria?",
+                "id": "16",
+                "answers": [
+                  { "text": "You must wait at least 3 months after full recovery", "answer_start": 270 }
+                ],
+                "is_impossible": false
+              }
+            ]
+          },
+          {
+            "context": "Blood donation is a voluntary act in India. Blood banks charge only for processing and storage but not for the blood itself. People can register as blood donors at hospitals, blood banks, or through online platforms. In an emergency, blood can be requested from the nearest blood bank or hospital.",
+            "qas": [
+              {
+                "question": "Are blood donations voluntary in India?",
+                "id": "17",
+                "answers": [
+                  { "text": "Yes, most donations are voluntary", "answer_start": 2 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Do blood banks charge for blood?",
+                "id": "18",
+                "answers": [
+                  { "text": "They charge for processing and storage, but not for the blood itself", "answer_start": 40 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Where can I donate blood?",
+                "id": "19",
+                "answers": [
+                  { "text": "At hospitals, blood banks, or blood donation camps", "answer_start": 117 }
+                ],
+                "is_impossible": false
+              },
+              {
+                "question": "Can I request blood from a blood bank in an emergency?",
+                "id": "20",
+                "answers": [
+                  { "text": "Yes, by contacting the nearest blood bank or hospital", "answer_start": 182 }
+                ],
+                "is_impossible": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
