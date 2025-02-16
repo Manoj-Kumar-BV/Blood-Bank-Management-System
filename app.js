@@ -246,7 +246,10 @@ app.post("/patient", (req, res) => {
             });
         } else {
             // Blood is not available in the specified blood bank for the required type within the last 45 days
-            res.send('Blood not available in the specified blood bank for the required type within the last 45 days.');
+            res.send(`
+                <p>Blood not available in the specified blood bank for the required type within the last 45 days.</p>
+                <button onclick="window.history.back()">Go Back</button>
+            `);
         }
     });
 });
